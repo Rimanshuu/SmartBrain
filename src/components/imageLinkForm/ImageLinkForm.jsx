@@ -4,7 +4,6 @@ import './ImageLinkForm.css'
 const ImageLinkForm = ({ theme }) => {
     return (
         <div className="image-form-container">
-            <h1 className="form-title"> Magic Brain</h1>
             <p className='f3 center form-subtitle'>
                 Detect faces in your pictures. Give it a try!
             </p>

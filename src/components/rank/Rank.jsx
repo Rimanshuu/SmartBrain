@@ -1,11 +1,16 @@
 import React from "react";
 
-cosnt Rank = () => {
+const Rank = () => {
     return (
-        <div>
+        <div className = "center">
             <div className='white f3'>
-
+                {'Rim your current rank is... '}
+            </div>
+            <div className='white f3'>
+                {' #3'}
             </div>
         </div>
     )
 }
+
+export default Rank;
