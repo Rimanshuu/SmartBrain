@@ -1,0 +1,40 @@
+:root {
+  --text: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --button-bg: rgba(255, 255, 255, 0.2);
+  --button-text: #ffffff;
+  --input-bg: rgba(255, 255, 255, 0.1);
+  --input-border: rgba(255, 255, 255, 0.3);
+  --input-text: #ffffff;
+}
+
+[data-theme="light"] {
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --button-bg: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  --button-text: #ffffff;
+  --input-bg: #ffc3c3;
+  --input-border: rgba(139, 92, 246, 0.3);
+  --input-text: #1b2533;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: linear-gradient(315deg, #000000 10%,#0a0e27 60%, #360a51 100% );
+  transition: background 0.3s ease;
+  min-height: 100vh;
+}
+
+[data-theme="light"] body {
+  background: linear-gradient(15deg, #FF5C00 40%, #B505FF 100%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button {
+  cursor: pointer;
+}

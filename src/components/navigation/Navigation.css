@@ -1,0 +1,21 @@
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px 30px;
+  gap: 30px;
+}
+
+.nav-text {
+  color: var(--text);
+}
+
+/* Dark mode darker text */
+[data-theme]:not([data-theme="light"]) .nav-text {
+  color: #d5dce9;
+}
+
+/* Light mode darker text */
+[data-theme="light"] .nav-text {
+  color: #0f172a;
+}
