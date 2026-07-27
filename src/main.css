@@ -28,7 +28,7 @@ body {
 }
 
 [data-theme="light"] body {
-  background: linear-gradient(15deg, #FF5C00 40%, #B505FF 100%);
+  background: linear-gradient(135deg, #B505FF 10%, #FF5C00 100%);
 }
 
 html {

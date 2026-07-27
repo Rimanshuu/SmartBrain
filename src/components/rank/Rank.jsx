@@ -1,13 +1,12 @@
-import React from "react";
 
 const Rank = () => {
     return (
         <div className = "center">
-            <div className='white f3'>
-                {'Rim your current rank is... '}
+            <div className='f3'>
+                {'Manav your current rank is... '}
             </div>
-            <div className='white f3'>
-                {' #3'}
+            <div className='f3'>
+                {' #1'}
             </div>
         </div>
     )

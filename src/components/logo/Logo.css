@@ -11,21 +11,23 @@
   height: 150px;
   width: 150px;
   background-color: rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid #c084fc;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
 }
 
 .logo-box:hover {
   box-shadow: 0 8px 60px rgba(124, 56, 241, 0.7);
 }
 
-[data-theme="light"] .logo-box:hover {
-  box-shadow: 0 8px 100px rgb(253, 251, 251);
-}
-
 [data-theme="light"] .logo-box {
   background-color: rgba(139, 92, 246, 0.3);
+  border: 2px solid #6d28d9;
+}
+
+[data-theme="light"] .logo-box:hover {
+  box-shadow: 0 8px 100px rgb(253, 251, 251);
 }
 
 .logo-image {

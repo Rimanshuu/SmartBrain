@@ -1,7 +1,6 @@
-import React from "react";
 import './ImageLinkForm.css'
 
-const ImageLinkForm = ({ theme }) => {
+const ImageLinkForm = ({ onInputChange, onClick }) => {
     return (
         <div className="image-form-container">
             <p className='f3 center form-subtitle'>
@@ -14,8 +13,17 @@ const ImageLinkForm = ({ theme }) => {
                             className='f4 form-input'
                             type="text"
                             placeholder="Paste image URL here..."
+                            onChange={(event) => {
+                                const value = event.target.value;
+                                if (value.trim()) onInputChange(value); //update when not empty
+                            }}
                         />
-                        <button className='f5 form-button'>Detect</button>
+                        <button 
+                            className='f5 form-button'
+                            onClick={onClick}
+                        >
+                            Detect
+                        </button>
                     </div>
                 </div>
             </div>
