@@ -39,6 +39,7 @@ export const GRADIENTS = {
   // Button Gradients
   button: {
     dark: 'linear-gradient(135deg, #1e40af 0%, #7c3aed 100%)',
+    light: 'linear-gradient(315deg, #fac403 5%, #ff4f04 90%)',
   },
 };
 

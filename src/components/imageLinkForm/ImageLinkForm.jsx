@@ -18,8 +18,8 @@ const ImageLinkForm = ({ onInputChange, onClick }) => {
                                 if (value.trim()) onInputChange(value); //update when not empty
                             }}
                         />
-                        <button 
-                            className='f5 form-button'
+                        <button
+                            className='btn-primary'
                             onClick={onClick}
                         >
                             Detect

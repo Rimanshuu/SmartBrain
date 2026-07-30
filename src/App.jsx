@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDebounce } from './hooks/useDebounce';
 import ParticlesBg from 'particles-bg'
 import Navigation from './components/navigation/Navigation';
+// import SignIn from './components/SingIn/SignIn';
 import Logo from './components/logo/Logo';
 import Rank from './components/rank/Rank'
 import ImageLinkForm from './components/imageLinkForm/ImageLinkForm';
@@ -13,8 +14,7 @@ const DEBOUNCE_DELAY = 500;
 const CONFIDENCE_THRESHOLD = 0.9;
 const PERSON_LABEL = 'person';
 
-function App() {
-  const [theme, setTheme] = useState('dark');
+function App({ theme, toggleTheme }) {
   const [input, setInput] = useState("");
   const debouncedInput = useDebounce(input, DEBOUNCE_DELAY); //debounced value of input
 
@@ -28,16 +28,14 @@ function App() {
   //const corsFreeTestImgLink = "https://huggingface.co/datasets/mishig/sample_images/resolve/main/football-match.jpg"
   
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-
-  useEffect(() => {
     if(!debouncedInput) return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDetections([]);  //clearning old detections immediately
     setDisplayDetections(false);  // clearing/hiding old boxes
     setDetectClicked(false);
+
+    let isStale = false; //flagging for this specific effect run
 
     const fetchDetections = async() => {
       setLoading(true);
@@ -61,25 +59,27 @@ function App() {
         setDetections(highConfidenceItems.filter(items => items.label === PERSON_LABEL)); //filters only "person" label
 
       } catch (error) {
-        console.error("Error detecting faces:", error);
-        setError(error.message);  // setting error message
-        setDetections([]);  // clearing detections on error   
+        if(!isStale) {
+          console.error("Error detecting faces:", error);
+          setError(error.message);  // setting error message
+          setDetections([]);  // clearing detections on error   
+        }
 
       } finally {
-        setLoading(false);
+        if(!isStale) setLoading(false);
       }
     };
     
     fetchDetections();
 
+    return () => {
+      isStale = true; // marking this specific runs results as irrelevant
+    };
+
   }, [debouncedInput, token]);
 
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
-
-  const onInputChange = (value) => {
+const onInputChange = (value) => {
     setInput(value);
     setDetectClicked(false);
     setDisplayDetections(false);
@@ -92,12 +92,7 @@ function App() {
   
   return (
     <>
-      <ParticlesBg
-        color="#5d15b0"
-        type="cobweb"
-        bg={true}
-        num={80}
-      />
+      <ParticlesBg color="#5d15b0" type="cobweb" bg={true} num={80} />
       <Navigation theme={theme} onToggleTheme={toggleTheme}/>
       <Logo theme={theme}/>
       <Rank />

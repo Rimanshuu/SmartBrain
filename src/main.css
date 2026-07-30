@@ -38,3 +38,29 @@ html {
 button {
   cursor: pointer;
 }
+
+/* ── Shared primary button ── */
+.btn-primary {
+  background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+  color: var(--button-text);
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .btn-primary {
+  background: linear-gradient(315deg, #fac403 5%, #ff4f04 90%);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
