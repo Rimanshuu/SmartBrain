@@ -1,0 +1,40 @@
+.logo-container {
+  display: flex;
+  justify-content: center;
+}
+
+.logo-tilt {
+  width: 150px;
+}
+
+.logo-box {
+  height: 150px;
+  width: 150px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1.5px solid #c084fc;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
+}
+
+.logo-box:hover {
+  box-shadow: 0 8px 60px rgba(124, 56, 241, 0.7);
+}
+
+[data-theme="light"] .logo-box {
+  background-color: #7c3aed;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+}
+
+[data-theme="light"] .logo-box:hover {
+  box-shadow: 0 8px 50px rgba(255, 255, 255, 0.8);
+}
+
+.logo-image {
+  filter: invert(1) sepia(0.3) hue-rotate(270deg) saturate(2) brightness(0.9);
+}
+
+.logo-image.light {
+  filter: brightness(0);
+}

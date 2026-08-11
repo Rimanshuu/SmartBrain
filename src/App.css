@@ -17,6 +17,11 @@
   }
 }
 
+.center {
+  display: flex; 
+  justify-content: center;
+}
+
 .hero {
   position: relative;
 
@@ -33,7 +38,7 @@
     z-index: 0;
   }
 
-  .framework,=
+  .framework,
   .vite {
     position: absolute;
   }
