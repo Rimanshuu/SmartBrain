@@ -8,10 +8,31 @@ import Register from './components/Register/Register.jsx';
 
 function Root() {
   const [theme, setTheme] = useState('dark');
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
+  const loadUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData)); //saving to locaStorage
+  }
+
+  const updateUserEntries = (newEntries) => {
+    setUser(prev => { 
+      const updated = {...prev, entries: newEntries };
+      localStorage.setItem('user', JSON.stringify(updated));
+      return updated;
+     });
+  };
+
+  const logoutUser = () => {
+    setUser(null);
+    localStorage.removeItem('user');
+  }
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -20,9 +41,9 @@ function Root() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<App theme={theme} toggleTheme={toggleTheme} />}/>
-        <Route path="signin" element={<SignIn theme={theme} />}/>
-        <Route path="register" element={<Register theme={theme} />}/>
+        <Route index element={<App theme={theme} toggleTheme={toggleTheme} user={user} loadUser={loadUser} updateUserEntries={updateUserEntries} logoutUser={logoutUser} />}/>
+        <Route path="signin" element={<SignIn theme={theme} loadUser={loadUser} user={user} />}/>
+        <Route path="register" element={<Register theme={theme}  loadUser={loadUser} user={user} />}/>
       </Routes>
     </BrowserRouter>
   );

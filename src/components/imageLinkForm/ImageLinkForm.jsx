@@ -3,9 +3,9 @@ import './ImageLinkForm.css'
 const ImageLinkForm = ({ onInputChange, onClick }) => {
     return (
         <div className="image-form-container">
-            <p className='f3 center form-subtitle'>
-                Detect faces in your pictures. Give it a try!
-            </p>
+            {/* <p className='f3 center form-subtitle'>
+                Detect humans in your pictures. Give it a try!
+            </p> */}
             <div className="center form-wrapper">
                 <div className="form center">
                     <div className="form-inputs">

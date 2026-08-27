@@ -11,7 +11,6 @@ const FaceRecognition = ({imageUrl, detections, displayDetections, detectClicked
         // console.log("displayed height:", imgRef.current.clientHeight);
         // console.log("natural width:", imgRef.current.naturalWidth);
         // console.log("natural height:", imgRef.current.naturalHeight);
-
         const scaleX = imgRef.current.clientWidth / imgRef.current.naturalWidth;
         const scaleY = imgRef.current.clientHeight / imgRef.current.naturalHeight;
 
@@ -19,6 +18,8 @@ const FaceRecognition = ({imageUrl, detections, displayDetections, detectClicked
         x: scaleX,
         y: scaleY,
         });
+
+        
     }
 
     return (

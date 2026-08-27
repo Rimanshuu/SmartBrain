@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDebounce } from './hooks/useDebounce';
+import { Navigate } from 'react-router-dom';
 import ParticlesBg from 'particles-bg'
+
+
 import Navigation from './components/navigation/Navigation';
 // import SignIn from './components/SingIn/SignIn';
 import Logo from './components/logo/Logo';
@@ -11,22 +14,39 @@ import './App.css'
 
 //Magic constants
 const DEBOUNCE_DELAY = 500;
-const CONFIDENCE_THRESHOLD = 0.9;
+const CONFIDENCE_THRESHOLD = 0.85;
 const PERSON_LABEL = 'person';
 
-function App({ theme, toggleTheme }) {
+function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
+  
   const [input, setInput] = useState("");
   const debouncedInput = useDebounce(input, DEBOUNCE_DELAY); //debounced value of input
 
   const [detections, setDetections] = useState([]);
-  const [displayDetections, setDisplayDetections] = useState(false)
+  const [displayDetections, setDisplayDetections] = useState(false);
+  const [detectionCount, setDetectionCount] = useState(0);
   const [detectClicked, setDetectClicked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const token = import.meta.env.VITE_HF_TOKEN;
   //const corsFreeTestImgLink = "https://huggingface.co/datasets/mishig/sample_images/resolve/main/football-match.jpg"
-  
+
+
+    // Then replace the onUpdateEntries function with:
+    const onUpdateEntries = useCallback(async (detectionCount) => {
+        try {
+            const response = await fetch("http://localhost:3000/image", {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id: user.id, entries: detectionCount})
+            });
+            const newEntries = await response.json();
+            updateUserEntries(newEntries);
+        } catch (error) {
+            console.error("Error updating entries:", error);
+        }
+    }, [user, updateUserEntries]);
+      
   useEffect(() => {
     if(!debouncedInput) return;
 
@@ -56,7 +76,11 @@ function App({ theme, toggleTheme }) {
   
         const results = await apiResponse.json();
         let highConfidenceItems = results.filter(results => results.score >= CONFIDENCE_THRESHOLD);
-        setDetections(highConfidenceItems.filter(items => items.label === PERSON_LABEL)); //filters only "person" label
+        const detectedPersons = highConfidenceItems.filter(items => items.label === PERSON_LABEL);
+        setDetections(detectedPersons);
+
+        setDetectionCount(detectedPersons.length);
+        
 
       } catch (error) {
         if(!isStale) {
@@ -71,15 +95,16 @@ function App({ theme, toggleTheme }) {
     };
     
     fetchDetections();
+    
 
     return () => {
       isStale = true; // marking this specific runs results as irrelevant
     };
 
-  }, [debouncedInput, token]);
+  }, [debouncedInput, token, user, updateUserEntries]);
 
 
-const onInputChange = (value) => {
+  const onInputChange = (value) => {
     setInput(value);
     setDetectClicked(false);
     setDisplayDetections(false);
@@ -88,23 +113,32 @@ const onInputChange = (value) => {
   const onDetectButtonClick = () => {
     setDetectClicked(true);
     setDisplayDetections(true);
+    if (detectionCount > 0) {
+        onUpdateEntries(detectionCount);
+    }
   };
-  
-  return (
-    <>
-      <ParticlesBg color="#5d15b0" type="cobweb" bg={true} num={80} />
-      <Navigation theme={theme} onToggleTheme={toggleTheme}/>
-      <Logo theme={theme}/>
-      <Rank />
-      {error && (
-        <div className="error-message" style={{ color: 'red', textAlign: 'center', marginBottom: '20px' }}>
-          {error}
-        </div>
-      )}
-      <ImageLinkForm onInputChange={onInputChange} onClick={onDetectButtonClick}/>
-      <FaceRecognition imageUrl={input} detections={detections} displayDetections={displayDetections} detectClicked={detectClicked} loading={loading}/>
-    </>
+
+  if (!user) {
+        return <Navigate to="/signin" />;  // Redirect if not logged in
+  } else {
+    return (
+      <>
+        <ParticlesBg color="#5d15b0" type="cobweb" bg={true} num={80} />
+        <Navigation theme={theme} onToggleTheme={toggleTheme} logoutUser={logoutUser}/>
+        <Logo theme={theme}/>
+        <Rank user={user} detections={detections}/>
+        {error && (
+          <div className="error-message" style={{ color: 'red', textAlign: 'center', marginBottom: '20px' }}>
+            {error}
+          </div>
+        )}
+        <ImageLinkForm onInputChange={onInputChange} onClick={onDetectButtonClick}/>
+        <FaceRecognition imageUrl={input} detections={detections} displayDetections={displayDetections} detectClicked={detectClicked} loading={loading}/>
+      </>
   )
+  }
+  
+  
 }
 
 export default App
