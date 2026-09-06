@@ -23,6 +23,7 @@ const SignIn = ({loadUser, user}) => {
         fetch("http://localhost:3000/signin", {
             method:'post',
             headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
             body: JSON.stringify({ email, password })
         })
         .then(response => {
@@ -31,11 +32,11 @@ const SignIn = ({loadUser, user}) => {
         })
         .then(({status, data}) => {
             if(status === 200) {
-                console.log("Sign in Successful!");
+                console.log("[FRONTEND] Sign in Successful!");
                 loadUser(data);
                 navigate('/', { replace: true });
             } else {
-                console.log("Sign in failed:", data);
+                console.log("[FRONTEND] Sign in failed:", data);
                 // TODO: Show error message to user
             }
         })

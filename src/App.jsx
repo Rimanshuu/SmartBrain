@@ -13,7 +13,7 @@ import FaceRecognition from './components/faceRecognition/faceRecognition';
 import './App.css'
 
 //Magic constants
-const DEBOUNCE_DELAY = 500;
+const DEBOUNCE_DELAY = 100;
 const CONFIDENCE_THRESHOLD = 0.85;
 const PERSON_LABEL = 'person';
 
@@ -24,7 +24,6 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
 
   const [detections, setDetections] = useState([]);
   const [displayDetections, setDisplayDetections] = useState(false);
-  const [detectionCount, setDetectionCount] = useState(0);
   const [detectClicked, setDetectClicked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -32,36 +31,52 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   //const corsFreeTestImgLink = "https://huggingface.co/datasets/mishig/sample_images/resolve/main/football-match.jpg"
 
 
-    // Then replace the onUpdateEntries function with:
+    
     const onUpdateEntries = useCallback(async (detectionCount) => {
-        try {
-            const response = await fetch("http://localhost:3000/image", {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ id: user.id, entries: detectionCount})
-            });
-            const newEntries = await response.json();
-            updateUserEntries(newEntries);
-        } catch (error) {
-            console.error("Error updating entries:", error);
+    try {
+        const response = await fetch("http://localhost:3000/image", {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+            body: JSON.stringify({
+                entries: detectionCount,
+                image_url: input
+            })
+        });
+        
+        const data = await response.json();
+        
+        // Check if response was successful
+        if (!response.ok) {
+            setError(data);  // Show backend error message
+            return;
         }
-    }, [user, updateUserEntries]);
-      
+        
+        // Success - update user entries
+        setError(null);  // Clear any previous errors
+        updateUserEntries(data);
+        
+    } catch (error) {
+        console.error("Error updating entries:", error);
+        setError(error.message);
+    }
+  
+  }, [updateUserEntries, input]);
+
+
   useEffect(() => {
     if(!debouncedInput) return;
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setDetections([]);  //clearning old detections immediately
-    setDisplayDetections(false);  // clearing/hiding old boxes
-    setDetectClicked(false);
 
     let isStale = false; //flagging for this specific effect run
 
     const fetchDetections = async() => {
+      setDetections([]);  //clearning old detections immediately
+      setDisplayDetections(false);  // clearing/hiding old boxes
+      setDetectClicked(false);
       setLoading(true);
       setError(null); //clearning previous errors
 
-      try{  
+      try{
         const imgResponse = await fetch(debouncedInput);
         const imgBlob = await imgResponse.blob();
         //console.log(imgBlob);
@@ -78,9 +93,6 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
         let highConfidenceItems = results.filter(results => results.score >= CONFIDENCE_THRESHOLD);
         const detectedPersons = highConfidenceItems.filter(items => items.label === PERSON_LABEL);
         setDetections(detectedPersons);
-
-        setDetectionCount(detectedPersons.length);
-        
 
       } catch (error) {
         if(!isStale) {
@@ -101,7 +113,7 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
       isStale = true; // marking this specific runs results as irrelevant
     };
 
-  }, [debouncedInput, token, user, updateUserEntries]);
+  }, [debouncedInput, token]);
 
 
   const onInputChange = (value) => {
@@ -113,8 +125,8 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   const onDetectButtonClick = () => {
     setDetectClicked(true);
     setDisplayDetections(true);
-    if (detectionCount > 0) {
-        onUpdateEntries(detectionCount);
+    if (detections.length > 0) {
+      onUpdateEntries(detections.length);
     }
   };
 

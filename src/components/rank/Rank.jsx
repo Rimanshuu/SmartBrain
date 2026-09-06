@@ -1,13 +1,11 @@
 
-const Rank = ({user, detections}) => {
+const Rank = ({user}) => {
 
-    
-    let totalEntryCount = user.entries + detections.length;
     return (
         <div className = "center">
             <div className='f3'>
                 {/* later replace with real user */}
-                {`${user?.name} your entry count is ${totalEntryCount}`} 
+                {`${user?.name} your entry count is ${user.entries}`} 
             </div>
         </div>
     )

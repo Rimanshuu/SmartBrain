@@ -18,13 +18,22 @@ const Register = ({loadUser, user}) => {
         fetch("http://localhost:3000/register", {
             method:'post',
             headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
             body: JSON.stringify({ name, email, password })
         })
-        .then(response => response.json())
-        .then(data => {
-            //console.log("Registration successful:", data);
-            loadUser(data);
-            navigate('/', { replace: true });
+        .then(response => {
+            const status = response.status;
+            return response.json().then(data => ({status, data}));
+        })
+        .then(({status, data}) => {
+            if(status === 200) {
+                console.log("[FRONTEND] User Registeration Successful!");
+                loadUser(data);
+                navigate('/', { replace: true });
+            } else {
+                console.log("[FRONTEND]  User Registeration failed:", data);
+                // TODO: Show error message to user
+            }
         })
         .catch(error => console.error("Error:", error))
     } 

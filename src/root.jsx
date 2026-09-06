@@ -13,6 +13,26 @@ function Root() {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
+  // In root.jsx useEffect
+    useEffect(() => {
+      // The httpOnly cookie (not localStorage) is the real source of truth for
+      // whether we're logged in, so always ask the backend on mount.
+      fetch('http://localhost:3000/profile', { credentials: 'include' })
+        .then(res => {
+          if (!res.ok) throw new Error('not authenticated');
+          return res.json();
+        })
+        .then(data => {
+          setUser(data);
+          localStorage.setItem('user', JSON.stringify(data));
+        })
+        .catch(() => {
+          // no valid cookie (never logged in, or it expired) - clear any stale cache
+          setUser(null);
+          localStorage.removeItem('user');
+        });
+    }, []);  // Run only on mount
+
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
@@ -30,8 +50,11 @@ function Root() {
   };
 
   const logoutUser = () => {
-    setUser(null);
-    localStorage.removeItem('user');
+    fetch('http://localhost:3000/logout', { method: 'POST', credentials: 'include' })
+      .finally(() => {
+        setUser(null);
+        localStorage.removeItem('user');
+      });
   }
 
   useEffect(() => {
@@ -41,9 +64,23 @@ function Root() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<App theme={theme} toggleTheme={toggleTheme} user={user} loadUser={loadUser} updateUserEntries={updateUserEntries} logoutUser={logoutUser} />}/>
-        <Route path="signin" element={<SignIn theme={theme} loadUser={loadUser} user={user} />}/>
-        <Route path="register" element={<Register theme={theme}  loadUser={loadUser} user={user} />}/>
+        <Route index element={
+          <App 
+            theme={theme} 
+            toggleTheme={toggleTheme} user={user} 
+            loadUser={loadUser} 
+            updateUserEntries={updateUserEntries} 
+            logoutUser={logoutUser} />}/>
+        <Route path="signin" element={
+          <SignIn 
+            theme={theme} 
+            loadUser={loadUser} 
+            user={user} />}/>
+        <Route path="register" element={
+          <Register 
+            heme={theme}  
+            loadUser={loadUser} 
+            user={user} />}/>
       </Routes>
     </BrowserRouter>
   );
