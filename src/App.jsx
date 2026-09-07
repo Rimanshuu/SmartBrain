@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDebounce } from './hooks/useDebounce';
 import { Navigate } from 'react-router-dom';
 import ParticlesBg from 'particles-bg'
@@ -14,8 +14,6 @@ import './App.css'
 
 //Magic constants
 const DEBOUNCE_DELAY = 100;
-const CONFIDENCE_THRESHOLD = 0.85;
-const PERSON_LABEL = 'person';
 
 function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   
@@ -27,8 +25,7 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   const [detectClicked, setDetectClicked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const token = import.meta.env.VITE_HF_TOKEN;
-  //const corsFreeTestImgLink = "https://huggingface.co/datasets/mishig/sample_images/resolve/main/football-match.jpg"
+  const detectClickedRef = useRef(false); // tracks if user clicked detect while detection was still loading
 
 
     
@@ -70,39 +67,50 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
     let isStale = false; //flagging for this specific effect run
 
     const fetchDetections = async() => {
-      setDetections([]);  //clearning old detections immediately
-      setDisplayDetections(false);  // clearing/hiding old boxes
+      setDetections([]);
+      setDisplayDetections(false);
       setDetectClicked(false);
+      detectClickedRef.current = false;
       setLoading(true);
-      setError(null); //clearning previous errors
+      setError(null);
+
+      let detectedPersonsTemp = [];
 
       try{
-        const imgResponse = await fetch(debouncedInput);
-        const imgBlob = await imgResponse.blob();
-        //console.log(imgBlob);
-        const apiResponse = await fetch("https://router.huggingface.co/hf-inference/models/facebook/detr-resnet-50", 
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          method: "POST",
-          body: imgBlob,
+        // call backend /detect endpoint instead of hitting HF directly
+        // backend handles image fetching + HF API call + filtering all in one place
+        const response = await fetch("http://localhost:3000/detect", {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'include',
+          body: JSON.stringify({ image_url: debouncedInput })
         });
-  
-        const results = await apiResponse.json();
-        let highConfidenceItems = results.filter(results => results.score >= CONFIDENCE_THRESHOLD);
-        const detectedPersons = highConfidenceItems.filter(items => items.label === PERSON_LABEL);
-        setDetections(detectedPersons);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData);
+        }
+
+        detectedPersonsTemp = await response.json();
+        setDetections(detectedPersonsTemp);
 
       } catch (error) {
         if(!isStale) {
-          console.error("Error detecting faces:", error);
-          setError(error.message);  // setting error message
-          setDetections([]);  // clearing detections on error   
+          console.error("Error detecting objects:", error);
+          setError(error.message);
+          setDetections([]);
         }
 
       } finally {
-        if(!isStale) setLoading(false);
+        if(!isStale) {
+          setLoading(false);
+          // if user clicked button while loading, now shows boxes and increment
+          if (detectClickedRef.current && detectedPersonsTemp.length > 0) {
+            setDisplayDetections(true);
+            onUpdateEntries(detectedPersonsTemp.length);
+            detectClickedRef.current = false;
+          }
+        }
       }
     };
     
@@ -113,7 +121,7 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
       isStale = true; // marking this specific runs results as irrelevant
     };
 
-  }, [debouncedInput, token]);
+  }, [debouncedInput]); // only re-render when debounced input changes, even if 'onUpdateEntries' is one of the dependencies (ignore linting warning)
 
 
   const onInputChange = (value) => {
@@ -123,7 +131,16 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   };
 
   const onDetectButtonClick = () => {
+    detectClickedRef.current = true;
     setDetectClicked(true);
+
+    if (loading) {
+      // detection still loading in background, just mark that user clicked
+      // the effect's finally block will handle showing boxes + incrementing when done
+      return;
+    }
+
+    // detection already done, show boxes and increment count right away
     setDisplayDetections(true);
     if (detections.length > 0) {
       onUpdateEntries(detections.length);
@@ -144,7 +161,7 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
             {error}
           </div>
         )}
-        <ImageLinkForm onInputChange={onInputChange} onClick={onDetectButtonClick}/>
+        <ImageLinkForm onInputChange={onInputChange} onClick={onDetectButtonClick} loading={loading}/>
         <FaceRecognition imageUrl={input} detections={detections} displayDetections={displayDetections} detectClicked={detectClicked} loading={loading}/>
       </>
   )

@@ -9,6 +9,7 @@ const SignIn = ({loadUser, user}) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");;
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
@@ -33,11 +34,13 @@ const SignIn = ({loadUser, user}) => {
         .then(({status, data}) => {
             if(status === 200) {
                 console.log("[FRONTEND] Sign in Successful!");
+                setError(""); // clear any previous errors
                 loadUser(data);
                 navigate('/', { replace: true });
             } else {
                 console.log("[FRONTEND] Sign in failed:", data);
-                // TODO: Show error message to user
+                // backend returns {error: 'message'} so extract the message
+                setError(typeof data === 'string' ? data : data.error || 'Sign in failed');
             }
         })
         .catch(error => console.error("Error:", error))
@@ -48,6 +51,11 @@ const SignIn = ({loadUser, user}) => {
         <div className="auth-page">
             <div className="auth-card">
                 <h1 className="auth-title">Sign In</h1>
+                {error && (
+                    <div style={{ color: 'red', textAlign: 'center', marginBottom: '15px', fontSize: '14px' }}>
+                        {error}
+                    </div>
+                )}
                 <form>
                     <div className="auth-field">
                         <label className="auth-label">Email</label>
