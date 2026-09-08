@@ -31,7 +31,7 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
     
     const onUpdateEntries = useCallback(async (detectionCount) => {
     try {
-        const response = await fetch("http://localhost:3000/image", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/image`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -79,7 +79,7 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
       try{
         // call backend /detect endpoint instead of hitting HF directly
         // backend handles image fetching + HF API call + filtering all in one place
-        const response = await fetch("http://localhost:3000/detect", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/detect`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           credentials: 'include',

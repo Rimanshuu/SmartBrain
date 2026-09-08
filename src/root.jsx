@@ -17,7 +17,7 @@ function Root() {
     useEffect(() => {
       // The httpOnly cookie (not localStorage) is the real source of truth for
       // whether we're logged in, so always ask the backend on mount.
-      fetch('http://localhost:3000/profile', { credentials: 'include' })
+      fetch(`${import.meta.env.VITE_API_URL}/profile`, { credentials: 'include' })
         .then(res => {
           if (!res.ok) throw new Error('not authenticated');
           return res.json();
@@ -50,7 +50,7 @@ function Root() {
   };
 
   const logoutUser = () => {
-    fetch('http://localhost:3000/logout', { method: 'POST', credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/logout`, { method: 'POST', credentials: 'include' })
       .finally(() => {
         setUser(null);
         localStorage.removeItem('user');

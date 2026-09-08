@@ -21,7 +21,7 @@ const SignIn = ({loadUser, user}) => {
     const onSubmitSignIn = (e) => {
         e.preventDefault();
 
-        fetch("http://localhost:3000/signin", {
+        fetch(`${import.meta.env.VITE_API_URL}/signin`, {
             method:'post',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',

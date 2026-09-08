@@ -16,7 +16,7 @@ const Register = ({loadUser, user}) => {
     }
     const onSubmitRegister = (e) => {
         e.preventDefault();
-        fetch("http://localhost:3000/register", {
+        fetch(`${import.meta.env.VITE_API_URL}/register`, {
             method:'post',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
