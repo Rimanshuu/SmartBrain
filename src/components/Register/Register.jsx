@@ -45,6 +45,9 @@ const Register = ({loadUser, user}) => {
         <div className="auth-page">
             <div className="auth-card">
                 <h1 className="auth-title">Register</h1>
+                <p className="auth-subtitle">
+                    Create a free account to start finding the people in your photos.
+                </p>
                 {error && (
                     <div style={{ color: 'red', textAlign: 'center', marginBottom: '15px', fontSize: '14px' }}>
                         {error}

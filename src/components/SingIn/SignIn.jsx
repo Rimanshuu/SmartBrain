@@ -51,6 +51,9 @@ const SignIn = ({loadUser, user}) => {
         <div className="auth-page">
             <div className="auth-card">
                 <h1 className="auth-title">Sign In</h1>
+                <p className="auth-subtitle">
+                    SmartBrain finds and highlights every person in a photo. Sign in to try it.
+                </p>
                 {error && (
                     <div style={{ color: 'red', textAlign: 'center', marginBottom: '15px', fontSize: '14px' }}>
                         {error}
