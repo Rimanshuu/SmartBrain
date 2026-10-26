@@ -1,6 +1,7 @@
 import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import '../SingIn/SignIn.css';
+import Brand from '../brand/Brand';
 
 const Register = ({loadUser, user}) => {
 
@@ -44,12 +45,15 @@ const Register = ({loadUser, user}) => {
     return (
         <div className="auth-page">
             <div className="auth-card">
+                <div className="auth-brand">
+                    <Brand compact />
+                </div>
                 <h1 className="auth-title">Register</h1>
                 <p className="auth-subtitle">
                     Create a free account to start finding the people in your photos.
                 </p>
                 {error && (
-                    <div style={{ color: 'red', textAlign: 'center', marginBottom: '15px', fontSize: '14px' }}>
+                    <div className="message message-error auth-error" role="alert">
                         {error}
                     </div>
                 )}

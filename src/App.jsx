@@ -8,8 +8,6 @@ import { isExampleImage } from './exampleImages';
 
 import Navigation from './components/navigation/Navigation';
 // import SignIn from './components/SingIn/SignIn';
-import Logo from './components/logo/Logo';
-import Rank from './components/rank/Rank'
 import ImageLinkForm from './components/imageLinkForm/ImageLinkForm';
 import FaceRecognition from './components/faceRecognition/faceRecognition';
 import HelpModal from './components/helpModal/HelpModal';
@@ -18,6 +16,16 @@ import './App.css'
 
 //Magic constants
 const DEBOUNCE_DELAY = 100;
+const HELP_SEEN_KEY = 'smartbrain-help-seen';
+
+// storage can be blocked (private mode etc), so never let it break the page
+const hasSeenHelp = () => {
+  try {
+    return localStorage.getItem(HELP_SEEN_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
 
 function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   
@@ -30,8 +38,16 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [notice, setNotice] = useState(null); // neutral info, not an error
-  const [showHelp, setShowHelp] = useState(() => Number(user?.entries) === 0); // open once for brand-new users
-  const closeHelp = useCallback(() => setShowHelp(false), []);
+  // open automatically only the first time, for users who haven't counted anything yet
+  const [showHelp, setShowHelp] = useState(() => Number(user?.entries) === 0 && !hasSeenHelp());
+  const closeHelp = useCallback(() => {
+    setShowHelp(false);
+    try {
+      localStorage.setItem(HELP_SEEN_KEY, '1');
+    } catch {
+      // storage blocked - help may just open again next visit
+    }
+  }, []);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [resetting, setResetting] = useState(false);
   const closeResetConfirm = useCallback(() => {
@@ -256,16 +272,33 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   } else {
     return (
       <>
-        <ParticlesBg color="#5d15b0" type="cobweb" bg={true} num={80} />
-        <Navigation theme={theme} onToggleTheme={toggleTheme} logoutUser={logoutUser} onHelpClick={() => setShowHelp(true)}/>
+        <ParticlesBg color="#5d15b0" type="cobweb" bg={true} num={40} />
+        <Navigation
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          user={user}
+          logoutUser={logoutUser}
+          onHelpClick={() => setShowHelp(true)}
+          onResetClick={() => setShowResetConfirm(true)}
+        />
+
+        <main className="app-main">
+          <ImageLinkForm input={input} onInputChange={onInputChange} onClick={onDetectButtonClick} loading={loading}/>
+          {error && (
+            <p className="message message-error" role="alert">{error}</p>
+          )}
+          {notice && !error && (
+            <p className="message message-notice">{notice}</p>
+          )}
+          <FaceRecognition imageUrl={isValidUrl(input) ? input : ''} detections={detections} displayDetections={displayDetections} detectClicked={detectClicked} loading={loading} showResult={showResult} isDemo={isExampleImage(input)}/>
+        </main>
+
         {showHelp && (
           <HelpModal
             onClose={closeHelp}
             onExampleClick={(url) => { closeHelp(); onExampleClick(url); }}
           />
         )}
-        <Logo theme={theme}/>
-        <Rank user={user} onResetClick={() => setShowResetConfirm(true)}/>
         {showResetConfirm && (
           <ConfirmDialog
             title="Reset your count?"
@@ -276,18 +309,6 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
             busy={resetting}
           />
         )}
-        {error && (
-          <div className="error-message" style={{ color: 'red', textAlign: 'center', marginBottom: '20px' }}>
-            {error}
-          </div>
-        )}
-        {notice && !error && (
-          <div className="notice-message" style={{ color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '20px' }}>
-            {notice}
-          </div>
-        )}
-        <ImageLinkForm input={input} onInputChange={onInputChange} onClick={onDetectButtonClick} loading={loading}/>
-        <FaceRecognition imageUrl={isValidUrl(input) ? input : ''} detections={detections} displayDetections={displayDetections} detectClicked={detectClicked} loading={loading} showResult={showResult} isDemo={isExampleImage(input)}/>
       </>
   )
   }

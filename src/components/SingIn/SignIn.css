@@ -119,3 +119,23 @@
 .auth-link:hover {
     color: #7c3aed;
 }
+
+.auth-brand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.auth-error {
+    margin: 0 0 1rem;
+    font-size: 14px;
+}
+
+/* light theme's auth card is dark glass with white text, match it */
+[data-theme="light"] .auth-card .brand-name {
+    color: #ffffff;
+}
+
+[data-theme="light"] .auth-error {
+    color: #fecaca;
+}

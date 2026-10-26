@@ -1,99 +1,75 @@
-.image-form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
-    padding: 60px 20px;
-}
-
-.form-title {
-    color: var(--text);
-    font-size: 36px;
-    margin-bottom: 20px;
+.hero {
     text-align: center;
 }
 
-.form-subtitle {
-    font-size: 18px;
-    margin-bottom: 0;
+.hero-title {
+    color: var(--text);
+    font-size: clamp(28px, 6vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin: 0 0 12px;
 }
 
-.form-wrapper {
-    width: 100%;
+.hero-subtitle {
+    color: var(--text-secondary);
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.5;
+    margin: 0 auto 32px;
+    max-width: 520px;
 }
 
-.form {
-    width: 600px;
-    max-width: 90%;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 32px;
-    flex-direction: column; /* stack input row, hint and examples */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-[data-theme="light"] .form {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-
-.form-inputs {
+/* input + button share one rounded bar */
+.detect-form {
     display: flex;
     gap: 8px;
-    width: 100%;
-    justify-content: center;
+    padding: 6px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    backdrop-filter: blur(10px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-input {
+.detect-form:focus-within {
+    border-color: var(--accent-border);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.detect-input {
     flex: 1;
-    max-width: 400px;
+    min-width: 0; /* lets the input shrink on phones instead of overflowing */
+    padding: 0 14px;
+    border: none;
+    border-radius: var(--radius-md);
     background: var(--input-bg);
     color: var(--input-text);
-    border: 1px solid var(--input-border);
-    padding: 14px 16px;
-    border-radius: 8px;
     font-size: 16px;
-    transition: all 0.3s ease;
     outline: none;
 }
 
-.form-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+.detect-input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
 }
 
-[data-theme="light"] .form-input::placeholder {
+[data-theme="light"] .detect-input::placeholder {
     color: rgba(31, 41, 55, 0.5);
 }
 
-.form-input:focus {
-    border-color: var(--button-text);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+.detect-button {
+    flex-shrink: 0;
+    height: 48px;
+    padding: 0 28px;
 }
 
-
-.form-intro {
-    max-width: 600px;
-    text-align: center;
+@media (max-width: 600px) {
+    .detect-button {
+        padding: 0 18px;
+    }
 }
 
-.form-hint {
-    color: var(--text-secondary);
-    font-size: 14px;
-    text-align: center;
-    margin: 12px 0 0;
-}
-
-.form-hint-warning {
-    color: #fbbf24;
-}
-
-.f3 {
-    color: var(--text);
-    font-weight: 300;
-    transition: color 0.3s ease;
+/* thin text washes out on the bright light gradient */
+[data-theme="light"] .hero-subtitle {
+    font-weight: 400;
 }

@@ -4,40 +4,38 @@ import './ImageLinkForm.css'
 const ImageLinkForm = ({ input, onInputChange, onClick }) => {
     const showInvalidHint = input.trim() !== '' && !isValidUrl(input);
 
-    return (
-        <div className="image-form-container">
-            <div className="form-intro">
-                <h1 className="form-title">Find the people in any photo</h1>
-                <p className='f3 center form-subtitle'>
-                    Paste a link to an image and we'll draw a box around almost every person in it.
-                </p>
-            </div>
-            <div className="center form-wrapper">
-                <div className="form center">
-                    <div className="form-inputs">
-                        <input
-                            className='f4 form-input'
-                            type="text"
-                            placeholder="Paste image URL here..."
-                            value={input}
-                            onChange={(event) => onInputChange(event.target.value)}
-                        />
-                        <button
-                            className='btn-primary'
-                            onClick={onClick}
-                        >
-                            Detect
-                        </button>
-                    </div>
+    const onSubmit = (event) => {
+        event.preventDefault(); // Enter key detects instead of reloading the page
+        onClick();
+    };
 
-                    {showInvalidHint && (
-                        <p className="form-hint form-hint-warning">
-                            That doesn't look like a link. It should start with https://
-                        </p>
-                    )}
-                </div>
-            </div>
-        </div>
+    return (
+        <section className="hero">
+            <h1 className="hero-title">Find the people in any photo</h1>
+            <p className="hero-subtitle">
+                Paste a link to an image and we'll draw a box around almost every person in it.
+            </p>
+
+            <form className="detect-form" onSubmit={onSubmit}>
+                <input
+                    className="detect-input"
+                    type="text"
+                    placeholder="Paste image URL here..."
+                    aria-label="Image URL"
+                    value={input}
+                    onChange={(event) => onInputChange(event.target.value)}
+                />
+                <button type="submit" className="btn-primary detect-button">
+                    Detect
+                </button>
+            </form>
+
+            {showInvalidHint && (
+                <p className="message message-warning">
+                    That doesn't look like a link. It should start with https://
+                </p>
+            )}
+        </section>
     );
 }
 

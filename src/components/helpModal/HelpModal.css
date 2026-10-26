@@ -21,14 +21,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+    background: var(--accent-gradient);
     color: #ffffff;
     font-size: 14px;
     font-weight: 700;
-}
-
-[data-theme="light"] .help-step-number {
-    background: linear-gradient(315deg, #fac403 5%, #ff4f04 90%);
 }
 
 .help-step-title {
@@ -47,7 +43,7 @@
 
 .help-demo {
     padding-top: 20px;
-    border-top: 1px solid rgba(139, 92, 246, 0.2);
+    border-top: 1px solid var(--surface-border);
 }
 
 .help-demo-title {
@@ -88,7 +84,7 @@
 }
 
 .help-demo-thumb:hover {
-    border-color: #8b5cf6;
+    border-color: #8b5cf6; /* light accent border is white, invisible on the white card */
     transform: translateY(-2px);
 }
 
