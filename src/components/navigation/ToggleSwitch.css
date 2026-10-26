@@ -114,7 +114,7 @@
 }
 
 /* a bit narrower on phones so the nav fits on one line */
-@media (max-width: 600px) {
+@media (max-width: 720px) {
   .toggle-switch {
     width: 88px;
   }

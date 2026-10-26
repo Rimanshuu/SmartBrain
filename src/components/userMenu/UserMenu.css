@@ -132,7 +132,7 @@
 }
 
 /* phones: avatar only, keep the nav on one line */
-@media (max-width: 600px) {
+@media (max-width: 720px) {
     .user-menu-button {
         padding: 0 8px;
     }

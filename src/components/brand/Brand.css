@@ -1,14 +1,14 @@
 .brand {
-    --brand-size: 96px;
+    --brand-size: 112px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
 }
 
 /* smaller variant for the auth cards */
 .brand-compact {
-    --brand-size: 72px;
-    gap: 12px;
+    --brand-size: 80px;
+    gap: 14px;
 }
 
 .brand-tilt {
@@ -58,24 +58,108 @@
     filter: brightness(0);
 }
 
+/* ── Animated wordmark ── */
 .brand-name {
-    color: var(--text);
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
+    --smart-gradient: linear-gradient(90deg, #ffffff, #c4b5fd, #ffffff);
+    --brain-gradient: linear-gradient(90deg, #a78bfa, #f472b6, #22d3ee, #a78bfa);
+    display: inline-flex;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    line-height: 1;
+    perspective: 400px; /* gives the letters' flip-in some depth */
+    filter: drop-shadow(0 0 12px rgba(167, 139, 250, 0.35));
+    transition: filter 0.3s ease;
+}
+
+.brand:hover .brand-name {
+    filter: drop-shadow(0 0 18px rgba(244, 114, 182, 0.6));
+}
+
+[data-theme="light"] .brand-name {
+    --smart-gradient: linear-gradient(90deg, #1e1b4b, #4c1d95, #1e1b4b);
+    /* white-gold pops on the magenta-orange background */
+    --brain-gradient: linear-gradient(90deg, #ffffff, #fde047, #fff7ed, #ffffff);
+    filter: drop-shadow(0 2px 6px rgba(76, 29, 149, 0.45));
 }
 
 .brand-compact .brand-name {
-    font-size: 22px;
+    font-size: 24px;
 }
 
-@media (max-width: 600px) {
-    .brand {
-        --brand-size: 64px;
+.brand-word {
+    display: inline-flex;
+}
+
+/* each letter carries the gradient; the shimmer is offset per letter so the
+   colour flows across the word like a wave */
+.brand-letter {
+    display: inline-block;
+    background-size: 300% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation:
+        brand-letter-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--i) * 70ms) both,
+        brand-shimmer 5s linear calc(var(--i) * -0.3s) infinite;
+}
+
+.brand-word-smart .brand-letter {
+    background-image: var(--smart-gradient);
+}
+
+.brand-word-brain .brand-letter {
+    background-image: var(--brain-gradient);
+}
+
+@keyframes brand-letter-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.5em) rotateX(90deg);
+        filter: blur(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes brand-shimmer {
+    from { background-position: 0% 50%; }
+    to { background-position: 300% 50%; }
+}
+
+/* users who turn off animations skip the flip-in; the shimmer stays since
+   it's only a slow colour change, not movement */
+@media (prefers-reduced-motion: reduce) {
+    .brand-letter {
+        animation: brand-shimmer 8s linear calc(var(--i) * -0.3s) infinite;
+    }
+}
+
+/* tablets: a step down so the nav still fits on one line */
+@media (max-width: 860px) {
+    .brand:not(.brand-compact) {
+        --brand-size: 88px;
+        gap: 14px;
+    }
+
+    .brand-name {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 720px) {
+    .brand:not(.brand-compact) {
+        --brand-size: 68px;
         gap: 10px;
     }
 
     .brand-name {
         font-size: 20px;
+        letter-spacing: 1px;
     }
 }
