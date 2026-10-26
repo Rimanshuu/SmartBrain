@@ -29,8 +29,15 @@ const SignIn = ({loadUser, user}) => {
             body: JSON.stringify({ email, password })
         })
         .then(response => {
-             const status = response.status;
-             return response.json().then(data => ({status, data}));
+            const status = response.status;
+            // not every error comes back as JSON (e.g. a proxy or rate limiter), so fall back to plain text
+            return response.text().then(text => {
+                try {
+                    return { status, data: JSON.parse(text) };
+                } catch {
+                    return { status, data: text };
+                }
+            });
         })
         .then(({status, data}) => {
             if(status === 200) {
@@ -44,7 +51,10 @@ const SignIn = ({loadUser, user}) => {
                 setError(typeof data === 'string' ? data : data.error || 'Sign in failed');
             }
         })
-        .catch(error => console.error("Error:", error))
+        .catch(error => {
+            console.error("Error signing in:", error);
+            setError("Can't reach the server. Please try again in a moment.");
+        })
     }
 
 

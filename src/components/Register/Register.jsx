@@ -25,7 +25,14 @@ const Register = ({loadUser, user}) => {
         })
         .then(response => {
             const status = response.status;
-            return response.json().then(data => ({status, data}));
+            // not every error comes back as JSON (e.g. a proxy or rate limiter), so fall back to plain text
+            return response.text().then(text => {
+                try {
+                    return { status, data: JSON.parse(text) };
+                } catch {
+                    return { status, data: text };
+                }
+            });
         })
         .then(({status, data}) => {
             if(status === 200) {
@@ -39,7 +46,10 @@ const Register = ({loadUser, user}) => {
                 setError(typeof data === 'string' ? data : data.error || 'Registration failed');
             }
         })
-        .catch(error => console.error("Error:", error))
+        .catch(error => {
+            console.error("Error registering:", error);
+            setError("Can't reach the server. Please try again in a moment.");
+        })
     } 
 
     return (
