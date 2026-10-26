@@ -119,3 +119,13 @@
     width: 88px;
   }
 }
+
+/* light: icons are dark on the white track; the active sun sits on the
+   orange knob, so it stays white */
+[data-theme="light"] .icon-img {
+  filter: none;
+}
+
+[data-theme="light"] .toggle-switch.light .sun-stack .filled {
+  filter: invert(1) brightness(1.2);
+}

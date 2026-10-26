@@ -37,14 +37,16 @@
     box-shadow: 0 8px 60px rgba(124, 56, 241, 0.7);
 }
 
+/* light: deep twilight tile with a glowing golden brain - a sun on a dusk sky.
+   Same glow-on-hover idea as dark mode, in magenta/orange */
 [data-theme="light"] .brand-mark {
-    background-color: #7c3aed;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+    background: linear-gradient(135deg, #3b0764 0%, #1e1b4b 100%);
+    border: 1.5px solid #f472b6;
+    box-shadow: 0 8px 30px rgba(219, 39, 119, 0.5);
 }
 
 [data-theme="light"] .brand-mark:hover {
-    box-shadow: 0 8px 50px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 60px rgba(249, 115, 22, 0.75);
 }
 
 .brand-image {
@@ -55,13 +57,13 @@
 }
 
 [data-theme="light"] .brand-image {
-    filter: brightness(0);
+    filter: invert(1) sepia(1) saturate(3) hue-rotate(-15deg) brightness(1.05)
+        drop-shadow(0 0 6px rgba(251, 191, 36, 0.8));
 }
 
 /* ── Animated wordmark ── */
 .brand-name {
-    --smart-gradient: linear-gradient(90deg, #ffffff, #c4b5fd, #ffffff);
-    --brain-gradient: linear-gradient(90deg, #a78bfa, #f472b6, #22d3ee, #a78bfa);
+    --brand-gradient: linear-gradient(90deg, #a78bfa, #f472b6, #22d3ee, #a78bfa);
     display: inline-flex;
     font-family: 'Orbitron', sans-serif;
     font-size: 30px;
@@ -77,11 +79,15 @@
     filter: drop-shadow(0 0 18px rgba(244, 114, 182, 0.6));
 }
 
+/* light: twilight violet -> fuchsia -> crimson, with a fuchsia glow like the
+   purple glow in dark mode */
 [data-theme="light"] .brand-name {
-    --smart-gradient: linear-gradient(90deg, #1e1b4b, #4c1d95, #1e1b4b);
-    /* white-gold pops on the magenta-orange background */
-    --brain-gradient: linear-gradient(90deg, #ffffff, #fde047, #fff7ed, #ffffff);
-    filter: drop-shadow(0 2px 6px rgba(76, 29, 149, 0.45));
+    --brand-gradient: linear-gradient(90deg, #5b21b6, #a21caf, #be123c, #5b21b6);
+    filter: drop-shadow(0 0 10px rgba(192, 38, 211, 0.55));
+}
+
+[data-theme="light"] .brand:hover .brand-name {
+    filter: drop-shadow(0 0 18px rgba(219, 39, 119, 0.8));
 }
 
 .brand-compact .brand-name {
@@ -96,6 +102,7 @@
    colour flows across the word like a wave */
 .brand-letter {
     display: inline-block;
+    background-image: var(--brand-gradient);
     background-size: 300% 100%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -104,14 +111,6 @@
     animation:
         brand-letter-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--i) * 70ms) both,
         brand-shimmer 5s linear calc(var(--i) * -0.3s) infinite;
-}
-
-.brand-word-smart .brand-letter {
-    background-image: var(--smart-gradient);
-}
-
-.brand-word-brain .brand-letter {
-    background-image: var(--brain-gradient);
 }
 
 @keyframes brand-letter-in {

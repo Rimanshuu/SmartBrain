@@ -2,11 +2,8 @@ import Tilt from 'react-parallax-tilt';
 import brain from './brain.png';
 import './Brand.css';
 
-// each part is split into letters so they can animate in one after another
-const WORD_PARTS = [
-    { text: 'Smart', className: 'brand-word-smart' },
-    { text: 'Brain', className: 'brand-word-brain' },
-];
+// each word is split into letters so they can animate in one after another
+const WORDS = ['Smart', 'Brain'];
 
 // the animated logo + name, used in the nav and on the auth pages
 const Brand = ({ compact = false }) => {
@@ -20,9 +17,9 @@ const Brand = ({ compact = false }) => {
                 </div>
             </Tilt>
             <span className="brand-name" aria-label="SmartBrain">
-                {WORD_PARTS.map(part => (
-                    <span key={part.text} className={`brand-word ${part.className}`} aria-hidden="true">
-                        {[...part.text].map(letter => (
+                {WORDS.map(word => (
+                    <span key={word} className="brand-word" aria-hidden="true">
+                        {[...word].map(letter => (
                             <span
                                 key={letterIndex}
                                 className="brand-letter"

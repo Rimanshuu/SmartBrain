@@ -9,6 +9,8 @@
   --input-text: #ffffff;
 
   --accent-gradient: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+  --on-accent: #ffffff; /* text/icons sitting on the accent gradient */
+  --button-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
   --accent-border: rgba(139, 92, 246, 0.6);
   --accent-soft: rgba(139, 92, 246, 0.15);
   --surface: rgba(255, 255, 255, 0.1);
@@ -26,26 +28,33 @@
   --radius-lg: 14px;
 }
 
+/* light theme = dusk sunset: muted rose-coral-apricot sky, plum-tinted glass
+   instead of white, deep plum text. Cool twilight violets are the accent
+   because they contrast best against the warm sky */
 [data-theme="light"] {
-  --text: #1f2937;
-  --text-secondary: #3b0764; /* deep violet: readable on the magenta-orange gradient and on white cards */
-  --button-bg: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  --button-text: #ffffff;
-  --input-bg: rgba(255, 255, 255, 0.9);
-  --input-border: rgba(255, 255, 255, 0.6);
-  --input-text: #1b2533;
+  --text: #3b0d2e;
+  --text-secondary: #6b2650;
+  --button-bg: linear-gradient(315deg, #fac403 5%, #ff4f04 90%);
+  --button-text: #3b0d2e;
+  --input-bg: rgba(255, 241, 234, 0.82);
+  --input-border: rgba(91, 33, 82, 0.22);
+  --input-text: #3b0d2e;
 
+  /* buttons use the same sunset yellow-orange as the toggle's sun; dark plum
+     text on top because white doesn't read on yellow */
   --accent-gradient: linear-gradient(315deg, #fac403 5%, #ff4f04 90%);
-  --accent-border: rgba(255, 255, 255, 0.8);
-  --accent-soft: rgba(124, 58, 237, 0.1);
-  --surface: rgba(255, 255, 255, 0.2);
-  --surface-hover: rgba(255, 255, 255, 0.32);
-  --surface-border: rgba(255, 255, 255, 0.4);
-  --menu-bg: rgba(255, 255, 255, 0.98);
-  --pill-inset: inset 0 4px 15px rgba(0, 0, 0, 0.12);
-  --pill-glow: 0 0 24px rgba(255, 196, 3, 0.55);
+  --on-accent: #3b0d2e;
+  --button-shadow: 0 6px 20px rgba(255, 79, 4, 0.35);
+  --accent-border: rgba(234, 88, 12, 0.6);
+  --accent-soft: rgba(249, 115, 22, 0.15);
+  --surface: rgba(91, 33, 82, 0.12);
+  --surface-hover: rgba(91, 33, 82, 0.2);
+  --surface-border: rgba(91, 33, 82, 0.22);
+  --menu-bg: #f9dccd;
+  --pill-inset: inset 0 4px 12px rgba(59, 13, 46, 0.14);
+  --pill-glow: 0 0 24px rgba(251, 146, 60, 0.6);
   --danger-text: #991b1b;
-  --warning-text: #78350f;
+  --warning-text: #7c2d12;
 }
 
 body {
@@ -57,8 +66,17 @@ body {
   min-height: 100vh;
 }
 
+/* light: dusk sky - lilac haze top-left, warm rose middle, low golden sun
+   bottom-right over a dusty rose -> coral -> apricot base. Fixed so it
+   doesn't repeat on long pages */
 [data-theme="light"] body {
-  background: linear-gradient(135deg, #B505FF 10%, #FF5C00 100%);
+  background:
+    radial-gradient(circle at 8% 6%, rgba(167, 105, 200, 0.45) 0%, transparent 45%),
+    radial-gradient(circle at 92% 18%, rgba(232, 121, 149, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 82% 96%, rgba(251, 176, 59, 0.55) 0%, transparent 48%),
+    radial-gradient(circle at 12% 94%, rgba(240, 128, 108, 0.35) 0%, transparent 45%),
+    linear-gradient(170deg, #e3a1b4 0%, #eea58f 50%, #f0bd86 100%);
+  background-attachment: fixed;
 }
 
 html {
@@ -71,7 +89,7 @@ button {
 
 /* ── Shared primary button ── */
 .btn-primary {
-  background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+  background: var(--accent-gradient);
   color: var(--button-text);
   border: none;
   padding: 14px 28px;
@@ -82,13 +100,9 @@ button {
   transition: all 0.3s ease;
 }
 
-[data-theme="light"] .btn-primary {
-  background: linear-gradient(315deg, #fac403 5%, #ff4f04 90%);
-}
-
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+  box-shadow: var(--button-shadow);
 }
 
 .btn-primary:active {

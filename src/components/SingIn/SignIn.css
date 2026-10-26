@@ -17,26 +17,11 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
+/* light: warm cream glass on the dusk sky; text colours come from the tokens */
 [data-theme="light"] .auth-card {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme="light"] .auth-title {
-    color: #ffffff;
-}
-
-[data-theme="light"] .auth-label {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-[data-theme="light"] .auth-link {
-    color: rgba(255, 255, 255, 0.75);
-}
-
-[data-theme="light"] .auth-link:hover {
-    color: #ffffff;
+    background: rgba(255, 232, 222, 0.5);
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 20px 60px rgba(91, 33, 82, 0.2);
 }
 
 .auth-title {
@@ -59,10 +44,6 @@
     text-align: center;
     line-height: 1.5;
     margin: 0 0 2rem;
-}
-
-[data-theme="light"] .auth-subtitle {
-    color: rgba(255, 255, 255, 0.8);
 }
 
 .auth-field {
@@ -129,13 +110,4 @@
 .auth-error {
     margin: 0 0 1rem;
     font-size: 14px;
-}
-
-/* light theme's auth card is dark glass with white text, match it */
-[data-theme="light"] .auth-card .brand-name {
-    color: #ffffff;
-}
-
-[data-theme="light"] .auth-error {
-    color: #fecaca;
 }

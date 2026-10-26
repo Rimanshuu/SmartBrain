@@ -45,7 +45,7 @@
   align-items: center;
   justify-content: center;
   background: var(--accent-gradient);
-  color: #ffffff;
+  color: var(--on-accent);
   font-weight: 700;
 }
 

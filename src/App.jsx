@@ -272,7 +272,8 @@ function App({ theme, toggleTheme, user, updateUserEntries, logoutUser}) {
   } else {
     return (
       <>
-        <ParticlesBg color="#5d15b0" type="cobweb" bg={true} num={40} />
+        {/* particles only read their colour on mount, so remount when the theme changes */}
+        <ParticlesBg key={theme} color={theme === 'light' ? '#7e22ce' : '#5d15b0'} type="cobweb" bg={true} num={40} />
         <Navigation
           theme={theme}
           onToggleTheme={toggleTheme}
