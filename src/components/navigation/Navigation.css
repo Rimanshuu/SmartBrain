@@ -1,36 +1,40 @@
 .navbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  padding: 20px 30px;
-  gap: 30px;
+  gap: 16px;
+  padding: 16px 32px;
 }
 
-.nav-text {
-  color: var(--text);
-}
-
-/* pill button on the left, styled like the theme toggle's glass track */
-.help-button {
-  margin-right: auto;
+.nav-actions {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 18px 8px 8px;
+}
+
+/* shared look for every control in the nav (the original "How it works" pill):
+   thick glass border, inset shadow, glow on hover */
+.nav-pill {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px 0 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.2);
-  color: #d5dce9;
+  background: var(--surface);
+  border: 2px solid var(--surface-border);
+  box-shadow: var(--pill-inset);
+  color: var(--text);
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
-.help-button:hover {
-  border-color: rgba(139, 92, 246, 0.6);
-  box-shadow: 0 0 24px rgba(124, 58, 237, 0.35);
+.nav-pill:hover {
+  border-color: var(--accent-border);
+  box-shadow: var(--pill-inset), var(--pill-glow);
 }
 
 .help-button-icon {
@@ -40,29 +44,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
-  color: #ffffff;
+  background: var(--accent-gradient);
+  color: var(--on-accent);
   font-weight: 700;
 }
 
-[data-theme="light"] .help-button {
-  background: rgba(255, 255, 255, 0.15);
-  color: #0f172a;
-}
-
-[data-theme="light"] .help-button-icon {
-  background: linear-gradient(315deg, #fac403 5%, #ff4f04 90%);
-}
-
-/* on phones keep just the ? icon so the nav fits */
-@media (max-width: 600px) {
+@media (max-width: 720px) {
   .navbar {
-    padding: 16px;
-    gap: 16px;
+    padding: 12px 16px;
   }
 
+  .nav-actions {
+    gap: 8px;
+  }
+
+  /* icon only on phones */
   .help-button {
-    padding: 6px;
+    padding: 0 8px;
   }
 
   .help-button-text {
@@ -70,12 +68,20 @@
   }
 }
 
-/* Dark mode darker text */
-[data-theme]:not([data-theme="light"]) .nav-text {
-  color: #d5dce9;
+/* tablets: help becomes icon only to make room for the wordmark */
+@media (max-width: 860px) {
+  .help-button {
+    padding: 0 8px;
+  }
+
+  .help-button-text {
+    display: none;
+  }
 }
 
-/* Light mode darker text */
-[data-theme="light"] .nav-text {
-  color: #0f172a;
+/* very narrow screens: drop the wordmark, keep the logo */
+@media (max-width: 480px) {
+  .navbar .brand-name {
+    display: none;
+  }
 }

@@ -32,7 +32,7 @@ const FaceRecognition = ({imageUrl, detections, displayDetections, detectClicked
     }, [showResult]);
 
     return (
-        <div className='imageDisplayBox ma4' ref={containerRef}>
+        <div className='imageDisplayBox' ref={containerRef}>
             {imageFailed && (
                 <p className="result-message result-message-warning">
                     Couldn't load an image from this link. Make sure it's a direct image address

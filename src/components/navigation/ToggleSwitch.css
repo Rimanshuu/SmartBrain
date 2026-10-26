@@ -4,45 +4,46 @@
   justify-content: center;
 }
 
+/* same 52px height + glass look as the other nav pills */
 .toggle-switch {
   position: relative;
-  width: 130px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 45px;
+  width: 100px;
+  height: 52px;
+  background: var(--surface);
+  border-radius: 999px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  border: 2px solid var(--surface-border);
+  box-shadow: var(--pill-inset);
+  box-sizing: border-box;
   overflow: visible;
+  transition: all 0.3s ease;
 }
 
 .toggle-circle {
   position: absolute;
-  width: 54px;
-  height: 54px;
+  width: 40px;
+  height: 40px;
   background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
   border-radius: 50%;
-  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5), inset -2px -2px 5px rgba(0, 0, 0, 0.2);
-  left: 8px;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.5);
+  left: 4px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
-  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s ease, box-shadow 0.5s ease;
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease, box-shadow 0.4s ease;
 }
 
 .toggle-switch.light .toggle-circle {
   background: linear-gradient(315deg, #fac403 5%, #ff4f04 90%);
-  box-shadow: 0 8px 15px rgba(255, 107, 53, 0.5), inset -2px -2px 5px rgba(0, 0, 0, 0.2);
-  left: calc(100% - 62px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.5);
+  left: calc(100% - 44px);
 }
 
 .icon-stack {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
@@ -52,16 +53,16 @@
 }
 
 .moon-stack {
-  left: 23px;
+  left: 14px;
 }
 
 .sun-stack {
-  right: 23px;
+  right: 14px;
 }
 
 .icon-img {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   position: absolute;
   filter: invert(1) brightness(1.2);
   transition: opacity 0.4s ease;
@@ -108,9 +109,23 @@
 }
 
 .toggle-switch:hover {
-  box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 40px rgba(124, 58, 237, 0.4);
+  border-color: var(--accent-border);
+  box-shadow: var(--pill-inset), var(--pill-glow);
 }
 
-.toggle-switch.light:hover {
-  box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 40px rgba(247, 168, 168, 0.962);
+/* a bit narrower on phones so the nav fits on one line */
+@media (max-width: 720px) {
+  .toggle-switch {
+    width: 88px;
+  }
+}
+
+/* light: icons are dark on the white track; the active sun sits on the
+   orange knob, so it stays white */
+[data-theme="light"] .icon-img {
+  filter: none;
+}
+
+[data-theme="light"] .toggle-switch.light .sun-stack .filled {
+  filter: invert(1) brightness(1.2);
 }

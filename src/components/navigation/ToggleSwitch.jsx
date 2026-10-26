@@ -1,4 +1,3 @@
-import React from "react";
 import './ToggleSwitch.css'
 import moonOutline from './asleep.svg'
 import sunOutline from './light.svg'
@@ -8,22 +7,23 @@ import sunFilled from './light-filled.svg'
 const ToggleSwitch = ({ theme, onToggleTheme }) => {
     return (
         <div className="toggle-wrapper">
-            <div
+            <button
                 className={`toggle-switch ${theme}`}
                 onClick={onToggleTheme}
+                aria-label={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
             >
-                <div className="toggle-circle"></div>
+                <span className="toggle-circle"></span>
 
-                <div className="icon-stack moon-stack">
-                    <img src={moonOutline} alt="moon outline" className="icon-img outline" />
-                    <img src={moonFilled} alt="moon filled" className="icon-img filled" />
-                </div>
+                <span className="icon-stack moon-stack">
+                    <img src={moonOutline} alt="" className="icon-img outline" />
+                    <img src={moonFilled} alt="" className="icon-img filled" />
+                </span>
 
-                <div className="icon-stack sun-stack">
-                    <img src={sunOutline} alt="sun outline" className="icon-img outline" />
-                    <img src={sunFilled} alt="sun filled" className="icon-img filled" />
-                </div>
-            </div>
+                <span className="icon-stack sun-stack">
+                    <img src={sunOutline} alt="" className="icon-img outline" />
+                    <img src={sunFilled} alt="" className="icon-img filled" />
+                </span>
+            </button>
         </div>
     );
 }
