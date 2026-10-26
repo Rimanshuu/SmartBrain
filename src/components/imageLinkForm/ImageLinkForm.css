@@ -54,7 +54,7 @@
 }
 
 [data-theme="light"] .detect-input::placeholder {
-    color: rgba(31, 41, 55, 0.5);
+    color: rgba(59, 13, 46, 0.55);
 }
 
 .detect-button {

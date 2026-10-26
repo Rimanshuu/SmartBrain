@@ -36,7 +36,7 @@
   --text-secondary: #6b2650;
   --button-bg: linear-gradient(315deg, #fac403 5%, #ff4f04 90%);
   --button-text: #3b0d2e;
-  --input-bg: rgba(255, 241, 234, 0.82);
+  --input-bg: rgba(255, 228, 214, 0.35); /* dusky rose glass, a step lighter than the bar */
   --input-border: rgba(91, 33, 82, 0.22);
   --input-text: #3b0d2e;
 
